@@ -22,19 +22,18 @@ fi
 
 if [ -n "${git_token_file}" ]
 then
-    url_host="https:\/\/$(cat "${git_token_file}")@"
+    url_host="https:\/\/$(cat "${git_token_file}")@github.com\/"
 else
     url_host="git@github.com:"
 fi
 
 data_catalog="${data_catalog}"
-basedir="$(cd $(dirname "$0") && pwd)"
+basedir="$(cd "$(dirname "$0")" && pwd)"
 
 cd "${dest_dir}" || exit 1
 
 for repourl in $(python "${basedir}/listrepos.py" "${data_catalog}" | sed -e "s/https:\/\/github.com\//${url_host}/" -e 's/"//g')
 do
-    echo "${repourl}"
     reponameext="$(basename "${repourl}")"
     reponame="${reponameext%.*}"
 

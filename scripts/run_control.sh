@@ -15,13 +15,13 @@ then
     exit 1
 fi
 
-basedir="$(dirname $0)"
+basedir="$(dirname "$0")"
 
-echo "${ENCRYPTED_GITHUB_TOKEN}" | echo gcloud kms decrypt \
+echo "${ENCRYPTED_GITHUB_TOKEN}" | gcloud kms decrypt \
     --location="${KMS_KEYRING_REGION}" --keyring="${KMS_KEYRING}" \
     --key="${KMS_KEY}" --project="${PROJECT_ID}" \
     --ciphertext-file=- --plaintext-file=github_token.key
 
-${basedir}/reposupdate.sh ${data_catalog} . pull # github_token.key
-${basedir}/reposstatus.sh ${data_catalog} .
+${basedir}/reposupdate.sh "${data_catalog}" . pull github_token.key
+${basedir}/reposstatus.sh "${data_catalog}" .
 ${basedir}/check_pipeline_security_scans.sh .

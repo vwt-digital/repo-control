@@ -14,10 +14,11 @@ then
 fi
 
 data_catalog="${data_catalog}"
+basedir="$(cd $(dirname "$0") && pwd)"
 
 cd "${dest_dir}" || exit 1
 
-for repourl in $(jq '.dataset[].distribution[] | select(.format=="gitrepo") | .downloadURL' "${data_catalog}" | sed -e 's/"//g')
+for repourl in $(python "${basedir}/listrepos.py" "${data_catalog}" | sed -e 's/"//g')
 do
     reponameext="$(basename "$repourl")"
     reponame="${reponameext%.*}"

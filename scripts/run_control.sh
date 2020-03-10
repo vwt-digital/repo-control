@@ -17,7 +17,7 @@ fi
 
 basedir="$(dirname "$0")"
 
-echo "${ENCRYPTED_GITHUB_TOKEN}" | gcloud kms decrypt \
+echo "${ENCRYPTED_GITHUB_TOKEN}" | base64 -d | gcloud kms decrypt \
     --location="${KMS_KEYRING_REGION}" --keyring="${KMS_KEYRING}" \
     --key="${KMS_KEY}" --project="${PROJECT_ID}" \
     --ciphertext-file=- --plaintext-file=github_token.key

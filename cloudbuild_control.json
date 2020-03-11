@@ -27,7 +27,7 @@
         }
     ],
     "substitutions": {
-        "_DEPLOY_BRANCH_NAME": "__DCAT_DEPLOY_BRANCH_NAME__",
+        "_DEPLOY_BRANCH_NAME": "__DEPLOY_BRANCH_NAME__",
         "_ENCRYPTED_GITHUB_TOKEN": "__ENCRYPTED_GITHUB_TOKEN__",
         "_KEYRING_REGION": "europe",
         "_KEYRING": "github",

@@ -28,8 +28,10 @@ echo "Updating repositories"
 
 echo
 echo "Checking commits behind"
-"${basedir}"/reposstatus.sh "${data_catalog}" . | grep -v " 0 "
+"${basedir}"/reposstatus.sh "${data_catalog}" . | grep -v " 0 " | tee repository_status.txt
+gsutil cp repository_status.txt gs://"${PROJECT_ID}"-reports-stg/repository_status."$(date "+%Y%m%dT%H%M%S")".txt
 
 echo
 echo "Checking pipeline security scans"
-"${basedir}"/check_pipeline_security_scans.sh .
+"${basedir}"/check_pipeline_security_scans.sh . | tee security_scan_status.txt
+gsutil cp security_scan_status.txt gs://"${PROJECT_ID}"-reports-stg/security_scan_status."$(date "+%Y%m%dT%H%M%S")".txt

@@ -22,6 +22,14 @@ echo "${ENCRYPTED_GITHUB_TOKEN}" | base64 -d | gcloud kms decrypt \
     --key="${KMS_KEY}" --project="${PROJECT_ID}" \
     --ciphertext-file=- --plaintext-file=github_token.key
 
-${basedir}/reposupdate.sh "${data_catalog}" . pull github_token.key
-${basedir}/reposstatus.sh "${data_catalog}" .
-${basedir}/check_pipeline_security_scans.sh .
+echo
+echo "Updating repositories"
+"${basedir}"/reposupdate.sh "${data_catalog}" . pull github_token.key
+
+echo
+echo "Checking commits behind"
+"${basedir}"/reposstatus.sh "${data_catalog}" . | grep -v " 0 "
+
+echo
+echo "Checking pipeline security scans"
+"${basedir}"/check_pipeline_security_scans.sh .

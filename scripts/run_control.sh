@@ -6,7 +6,7 @@ DATA_CATALOG="${1}"
 PROJECT_ID="${2}"
 SECRET_ID="${6}"
 
-if [ -z "${ENCRYPTED_GITHUB_TOKEN}" ]
+if [ -z "${SECRET_ID}" ]
 then
     echo "Usage: $0 <data_catalog> <project_id> <secret_id>"
     exit 1

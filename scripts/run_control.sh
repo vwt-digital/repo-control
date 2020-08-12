@@ -2,29 +2,22 @@
 
 set -e
 
-data_catalog="${1}"
+DATA_CATALOG="${1}"
 PROJECT_ID="${2}"
-KMS_KEYRING_REGION="${3}"
-KMS_KEYRING="${4}"
-KMS_KEY="${5}"
-ENCRYPTED_GITHUB_TOKEN="${6}"
+SECRET_ID="${6}"
 
-if [ -z "${ENCRYPTED_GITHUB_TOKEN}" ]
+if [ -z "${SECRET_ID}" ]
 then
-    echo "Usage: $0 <data_catalog> <project_id> <keyring_region> <keyring> <key> <encrypted_github_token>"
+    echo "Usage: $0 <data_catalog> <project_id> <secret_id>"
     exit 1
 fi
 
 basedir="$(dirname "$0")"
 
-echo "${ENCRYPTED_GITHUB_TOKEN}" | base64 -d | gcloud kms decrypt \
-    --location="${KMS_KEYRING_REGION}" --keyring="${KMS_KEYRING}" \
-    --key="${KMS_KEY}" --project="${PROJECT_ID}" \
-    --ciphertext-file=- --plaintext-file=github_token.key
+github_token=$(gcloud secrets versions access latest --secret="${SECRET_ID}" --project="${PROJECT_ID}")
 
-echo
 echo "Updating repositories"
-"${basedir}"/reposupdate.sh "${data_catalog}" . pull github_token.key
+"${basedir}"/reposupdate.sh "${data_catalog}" . pull github_token
 
 echo
 echo "Checking commits behind"

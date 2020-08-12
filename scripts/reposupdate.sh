@@ -6,7 +6,7 @@
 data_catalog="${1}"
 dest_dir="${2}"
 git_command="${3}"
-git_token_file="${4}"
+git_token="${4}"
 
 if [ -z "${dest_dir}" ]
 then
@@ -20,9 +20,9 @@ then
     git_command=fetch
 fi
 
-if [ -n "${git_token_file}" ]
+if [ -n "${git_token}" ]
 then
-    url_host="https:\/\/$(cat "${git_token_file}")@github.com\/"
+    url_host="https:\/\/${git_token}@github.com\/"
 else
     url_host="git@github.com:"
 fi

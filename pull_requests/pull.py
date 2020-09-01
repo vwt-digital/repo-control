@@ -55,12 +55,15 @@ def main(args):
             logging.info(" + Opened pull request")
 
             commits = pull_request.get_commits()
-            authors = [commit.author.login for commit in commits]
-            assignee = get_most_common(authors)
+            if commits:
+                authors = [commit.author.login for commit in commits]
+                assignee = get_most_common(authors)
 
-            pull_request.create_review_request(reviewers=[assignee])
+                pull_request.create_review_request(reviewers=[assignee])
 
-            logging.info(" + Assigned {} to pull request".format(assignee))
+                logging.info(" + Assigned {} to pull request".format(assignee))
+            else:
+                logging.error(" + No commits found for pull request")
 
 
 if __name__ == '__main__':

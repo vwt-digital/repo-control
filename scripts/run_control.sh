@@ -4,7 +4,7 @@ set -e
 
 DATA_CATALOG="${1}"
 PROJECT_ID="${2}"
-SECRET_ID="${6}"
+SECRET_ID="${3}"
 
 if [ -z "${SECRET_ID}" ]
 then
@@ -17,11 +17,11 @@ basedir="$(dirname "$0")"
 github_token=$(gcloud secrets versions access latest --secret="${SECRET_ID}" --project="${PROJECT_ID}")
 
 echo "Updating repositories"
-"${basedir}"/reposupdate.sh "${data_catalog}" . pull github_token
+"${basedir}"/reposupdate.sh "${DATA_CATALOG}" . pull "${github_token}"
 
 echo
 echo "Checking commits behind"
-"${basedir}"/reposstatus.sh "${data_catalog}" . | grep -v " 0 " | tee repository_status.txt
+"${basedir}"/reposstatus.sh "${DATA_CATALOG}" . | grep -v " 0 " | tee repository_status.txt
 gsutil cp repository_status.txt gs://"${PROJECT_ID}"-reports-stg/repository_status."$(date "+%Y%m%dT%H%M%S")".txt
 
 echo

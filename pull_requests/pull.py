@@ -36,12 +36,16 @@ def parse_args():
     parser.add_argument('-o', '--organization',
                         required=True,
                         help='github organization name')
+    parser.add_argument('-r', '--reviewer',
+                        required=True,
+                        help='github backup reviewer')
     return parser.parse_args()
 
 
 def main(args):
 
     git = Github(args.token)
+    usr = git.get_user()
     org = git.get_organization(args.organization)
 
     for repo in org.get_repos():
@@ -58,6 +62,9 @@ def main(args):
             if commits:
                 authors = [commit.author.login for commit in commits]
                 assignee = get_most_common(authors)
+
+                if assignee == usr.login:  # Check if assignee is current GitHub user
+                    assignee = args.reviewer
 
                 pull_request.create_review_request(reviewers=[assignee])
 
